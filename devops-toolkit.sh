@@ -3,17 +3,20 @@
 sudo apt update
 sudo apt install -y zsh git curl
 
+# Install kubectl
 curl -LO https://dl.k8s.io/release/$(curl -L https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl
 chmod +x kubectl
 sudo mv kubectl /usr/local/bin/
 
-curl -Lo kubens https://raw.githubusercontent.com/ahmetb/kubens/master/kubens
-chmod +x kubens
-sudo mv kubens /usr/local/bin/
+# Install kubectx and kubens
+sudo git clone https://github.com/ahmetb/kubectx /opt/kubectx
+sudo ln -s /opt/kubectx/kubectx /usr/local/bin/kubectx
+sudo ln -s /opt/kubectx/kubens /usr/local/bin/kubens
 
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+# Install helm
+curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
+chmod 700 get_helm.sh
+./get_helm.sh
 
-plugins=(git zsh-autosuggestions zsh-syntax-highlighting kubectl kubectx)
-export plugins
-
-chsh -s /bin/zsh
+# Install kustomize
+curl -s "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh"  | bash
